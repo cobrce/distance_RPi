@@ -126,13 +126,4 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'asgi_redis.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
-            'capacity': 100,
-        },
-        'ROUTING' : 'app.routing.channel_routing',
-        },
-}
+CSRF_FAILURE_VIEW = 'app.views.csrf_failure'

@@ -4,26 +4,32 @@
 {% block content %}
 <script type="text/javascript">
 $(function () {
-    setheader();
     update();
     });
 
-    function setheader() {
-        $.ajaxSetup({
-        headers: { "X-CSRFToken": '{{csrf_token}}' }
+function setheader() {
+    $.ajaxSetup({
+    headers: { "X-CSRFToken": '{{csrf_token}}' }
     });
-    }
-
+}
+    
 function update() {
+    setheader();
     $.post("/", { "read": true })
-    .done(function (result) {
-        $('#dist').html(result);
-        $('#status').html('Connected');
+        .done(function (result) {
+        dict = JSON.parse(result)
+        $('#dist').html(dict['dist']);
+        $('#status').html(dict['status']);
+        if (dict['status'] == 'Suspended')
+			$("#stop").text("Resume");
+        else
+            $("#stop").text("Suspend");
     })
     .fail(function(xhr,status,error) {
 		$('#status').html("Connexion lost")		
 	}); 
     setTimeout("update()", 100);
+    //# sourceURL=update.js
 }
 </script>
 
@@ -34,7 +40,8 @@ function update() {
     {% load staticfiles%}
     <script>
 		function SuspendResume()
-		{
+        {
+            setheader();
 			if ($("#stop").text() == "Suspend") {
 				$.post("/", { "stop": 1 });
 				$("#stop").text("Resume");

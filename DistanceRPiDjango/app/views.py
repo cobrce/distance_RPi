@@ -12,6 +12,7 @@ from random import randint
 import time
 import os
 import sys
+import json
 
 ### super user = { login : admin, password : admin258 }
 if os.name == "nt":
@@ -48,19 +49,23 @@ def home(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)  
     
-    if th == None:
+    if th == None or not th.isAlive():
         th = Thread(target = Measure)
         th.start()
     
     if request.user.is_authenticated:
         if 'stop' in request.POST :
             try:
-                running =not bool(int(request.POST['stop']))
+                running = not bool(int(request.POST['stop']))
             except:
                 pass
 
     if 'read' in request.POST:
-        return HttpResponse("Distance (cm) :  {}".format(distance))
+        if running:
+            status = "Running"
+        else:
+            status = "Suspended"
+        return HttpResponse(json.dumps({"dist" : "Distance (cm) :  {}".format(distance),"status" : status}))
     else:
         return render(request,
             'app/index.html',
@@ -69,4 +74,8 @@ def home(request):
                 'year':datetime.now().year,
                 'distance' : 300,
             })
+
+def csrf_failure(request, reason=""):
+    ctx = {'message': 'some custom messages'}
+    return render_to_response(your_custom_template, ctx)
  
