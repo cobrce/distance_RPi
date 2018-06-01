@@ -32,8 +32,20 @@ function update() {
     
     {% if user.is_authenticated %}
     {% load staticfiles%}
-    <script src="{% static  'app/scripts/_stop.js'%}"></script>    
-    <a  id="stop" class="btn btn-default">Suspend</a>
+    <script>
+		function SuspendResume()
+		{
+			if ($("#stop").text() == "Suspend") {
+				$.post("/", { "stop": 1 });
+				$("#stop").text("Resume");
+			}
+			else {
+				$.post("/", { "stop": 0 });
+				$("#stop").text("Suspend");
+			}		
+		}
+    </script>
+    <a  id="stop" class="btn btn-default" href="javascript:void(0);" onclick="SuspendResume()" >Suspend</a>
     {% endif %}
 </div>
 <div style="font-style : italic" id="status">Connecting..</div>
