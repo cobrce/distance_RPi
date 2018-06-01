@@ -1,0 +1,41 @@
+{% extends "app/layout.html" %}
+
+
+{% block content %}
+<script type="text/javascript">
+$(function () {
+    setheader();
+    update();
+    });
+
+    function setheader() {
+        $.ajaxSetup({
+        headers: { "X-CSRFToken": '{{csrf_token}}' }
+    });
+    }
+
+function update() {
+    $.post("/", { "read": true })
+    .done(function (result) {
+        $('#dist').html(result);
+        $('#status').html('Connected');
+    })
+    .fail(function(xhr,status,error) {
+		$('#status').html("Connexion lost")		
+	}); 
+    setTimeout("update()", 100);
+}
+</script>
+
+<div class="jumbotron">
+    <div id="dist">Distance (cm) : {{ distance }}..</div>
+    
+    {% if user.is_authenticated %}
+    {% load staticfiles%}
+    <script src="{% static  'app/scripts/_stop.js'%}"></script>    
+    <a  id="stop" class="btn btn-default">Suspend</a>
+    {% endif %}
+</div>
+<div style="font-style : italic" id="status">Connecting..</div>
+
+{% endblock %}
