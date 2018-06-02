@@ -94,3 +94,4 @@ def home(request):
 
 def csrf_failure(request, reason=""):
     return HttpResponse("csrf failure")
+	
