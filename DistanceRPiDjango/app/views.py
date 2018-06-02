@@ -93,5 +93,4 @@ def home(request):
         })
 
 def csrf_failure(request, reason=""):
-    ctx = {'message': 'some custom messages'}
-    return render_to_response(your_custom_template, ctx)
+    return HttpResponse("csrf failure")
