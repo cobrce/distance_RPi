@@ -16,7 +16,9 @@ import app.views
 
 
 urlpatterns = [# Examples:
-    url(r'^$', app.views.home, name='home'),    
+    url(r'^$', app.views.home, name='home'),
+    url(r'^read',app.views.read,name='read'),
+    url(r'^resumesuspend',app.views.resumesuspend,name='resumesuspend'),    
     url(r'^login/$',
         django.contrib.auth.views.login,
         {

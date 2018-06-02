@@ -1,5 +1,6 @@
 # based on https://tutorials-raspberrypi.com/raspberry-pi-ultrasonic-sensor-hc-sr04/
 import os
+import sys
 import time
 import RPi.GPIO as g
 
@@ -41,3 +42,18 @@ def measure():
     delta = endtime - startime
     distance = delta * 34300 / 2
     return distance
+
+def myprint(var):
+    if not isinstance(var,str):
+        var = str(var)
+    sys.stdout.writelines(var + "\n")
+    sys.stdout.flush()
+
+def main():
+    init()
+    while True:
+        myprint("%0.2f" % measure())
+        time.sleep(0.1)
+
+if __name__ == "__main__":
+    main()

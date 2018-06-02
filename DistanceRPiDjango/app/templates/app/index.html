@@ -15,7 +15,7 @@ function setheader() {
     
 function update() {
     setheader();
-    $.post("/", { "read": true })
+    $.post("/read")
         .done(function (result) {
         dict = JSON.parse(result)
         $('#dist').html(dict['dist']);
@@ -43,11 +43,11 @@ function update() {
         {
             setheader();
 			if ($("#stop").text() == "Suspend") {
-				$.post("/", { "stop": 1 });
+				$.post("/resumesuspend", { "stop": 1 });
 				$("#stop").text("Resume");
 			}
 			else {
-				$.post("/", { "stop": 0 });
+				$.post("/resumesuspend", { "stop": 0 });
 				$("#stop").text("Suspend");
 			}		
 		}
